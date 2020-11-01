@@ -28,7 +28,8 @@ const defaultAlert = (isPending) => ({
 		? "Confirm to schedule the appointment."
 		: "Schedule an appointment for this slot",
 });
-function Appointments(props) {
+
+export function Appointments(props) {
 	const classes = useStyles();
 	const {
 		close,
