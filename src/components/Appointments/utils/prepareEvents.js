@@ -41,6 +41,5 @@ export const prepareAppointmentEvents = (appointments, { color, view, slot }) =>
 				slotId: event.slotId,
 			},
 		}));
-	console.log({ appointmentEvents })
 	return appointmentEvents;
 };

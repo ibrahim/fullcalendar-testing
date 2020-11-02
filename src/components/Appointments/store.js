@@ -5,15 +5,17 @@ const BACKGROUND_YELLOW_COLOR = "#FFA";
 const BACKGROUND_ORANGE_COLOR = "#ff4e4e";
 const BACKGROUND_BLUE_COLOR = "#025baa";
 
+export const colors =  {
+		blue: BACKGROUND_BLUE_COLOR,
+		yellow: BACKGROUND_YELLOW_COLOR,
+		orange: BACKGROUND_ORANGE_COLOR,
+	}
+
 const initia_state = {
 	slots: null,
 	upcomingSlot: null,
 	appointments: [],
-	colors: {
-		blue: BACKGROUND_BLUE_COLOR,
-		yellow: BACKGROUND_YELLOW_COLOR,
-		orange: BACKGROUND_ORANGE_COLOR,
-	},
+	colors
 };
 
 const useReducer = ({ state, setState }) => {
@@ -35,7 +37,8 @@ const useReducer = ({ state, setState }) => {
 	const removeAppointment = (event) => {
 		setState(
 			produce((draft) => {
-				draft.appointments = draft.appointments.filter(a => a.id !== event.id )
+				const newAppointments = draft.appointments.filter(a => a.id !== event.id )
+				draft.appointments = newAppointments
 			})
 		);
 	};
