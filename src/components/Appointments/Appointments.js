@@ -37,6 +37,7 @@ export function Appointments(props) {
 		colors,
 		appointments,
 		addAppointment,
+		addAppointmentValidation,
 		removeAppointment,
 	} = props;
 	const slotEvents = Array(slot);
@@ -78,44 +79,19 @@ export function Appointments(props) {
 		return result;
 	};
 
+
 	const handleTimeClick = (info) => {
 		const { dateStr } = info;
 		hideAlert();
-
-		if (!slot) {
-			setAlert({ severity: "warning", message: "Time slot is not defined" });
-			return;
-		}
-
+		
 		if (isPending) {
-			return;
+			return false;
 		}
 
-		const hasAppointment =
-			appointments && appointments.find((event) => event.slotId === slot.id);
-
-		if (hasAppointment) {
-			const date = moment(hasAppointment.startTime).format("DD MMM YYYY");
-			const startTime = moment(hasAppointment.startTime).format("HH:mm");
-			setAlert({
-				severity: "info",
-				message: `An appointment already booked for current Participant on ${date} at ${startTime}`,
-			});
-			return;
-		}
-		const withinSlotTime = moment(dateStr).isBetween(
-			moment(slot.start),
-			moment(slot.end),
-			undefined,
-			"[]"
-		);
-
-		if (!withinSlotTime) {
-			setAlert({
-				severity: "warning",
-				message: "Cannot schedule an appointment outside time slot.",
-			});
-			return;
+		const errors = addAppointmentValidation({dateStr,slot})
+		if(errors && errors.message){
+			setAlert(errors);
+			return
 		}
 
 		const api = calendarRef.current.getApi();
@@ -126,7 +102,6 @@ export function Appointments(props) {
 		}
 
 		setPending(true);
-		console.log({ isPending });
 
 		const startTime = moment(dateStr).format();
 		const endTime = moment(dateStr)
@@ -149,9 +124,6 @@ export function Appointments(props) {
 				slotId: slot.id,
 			},
 		});
-		const events = calendarApi.getEvents().filter(e => e.extendedProps.eventType === 'APPOINTMENT');
-		const event = events.map(e => ({id: e.id, start: e.start, end: e.end}))
-		console.log({events})
 		setConfirmation(true);
 		hideAlert();
 	};
@@ -317,12 +289,14 @@ const useHooksToProps = (props) => {
 		getAppointments,
 		removeAppointment,
 		addAppointment,
+		addAppointmentValidation,
 	} = useAppointmentsStore();
 
 	return {
 		colors,
 		appointments: getAppointments(),
 		addAppointment,
+		addAppointmentValidation,
 		removeAppointment,
 	};
 };
