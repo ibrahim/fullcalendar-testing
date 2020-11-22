@@ -22,12 +22,6 @@ const useStyles = makeStyles((theme) => ({
 		padding: 20,
 	},
 }));
-const defaultAlert = (isPending) => ({
-	severity: "info",
-	message: isPending
-		? "Confirm to schedule the appointment."
-		: "Schedule an appointment for this slot",
-});
 
 export function Appointments(props) {
 	const classes = useStyles();
@@ -62,7 +56,7 @@ export function Appointments(props) {
 				setAppointmentEvents(events);
 			}
 		},
-		[appointments, setAppointmentEvents]
+		[appointments, setAppointmentEvents, colors, currentView, slot]
 	);
 
 	const reset = () => {
@@ -130,10 +124,8 @@ export function Appointments(props) {
 
 	const handleDateClick = (info) => {
 		const { dateStr, view } = info;
-		console.log("handleDateClick");
 		try {
 			if (view.type === "dayGridMonth") {
-				console.log("dayGridMonth");
 				const api = calendarRef.current.getApi();
 				const calendarApi = api.view.calendar;
 				if (calendarApi) {
@@ -165,7 +157,6 @@ export function Appointments(props) {
 	};
 
 	const handelEventDropped = (info) => {
-		console.log("event dropped");
 		const { startStr } = info.event;
 		if (!isInPastDate(startStr)) {
 			hideAlert();

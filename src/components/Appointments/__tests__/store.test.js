@@ -1,10 +1,9 @@
 //import { render, fireEvent, screen } from "@testing-library/react";
-import { renderHook, cleanup, act } from "@testing-library/react-hooks";
+import { renderHook, act } from "@testing-library/react-hooks";
 import moment from "moment";
 import * as utils from "../utils/prepareEvents";
-import * as Api from "../Api";
 import { AppointmentsStoreProvider, useAppointmentsStore, MESSAGES } from "../store";
-import { slots } from "./Appointments.test";
+import { slots } from '../slots'
 
 const wrapper = ({ children }) => (
 	<AppointmentsStoreProvider>{children}</AppointmentsStoreProvider>
